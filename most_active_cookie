@@ -1,0 +1,3 @@
+#!/bin/bash
+javac -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: most_active_cookie.java
+exec java -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: most_active_cookie "$@"
