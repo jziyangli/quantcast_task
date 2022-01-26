@@ -15,7 +15,7 @@ This application has 5 main files:
 * most_active_cookie_test
 * * This is a bash script which first checks for dependencies (apache commons cli AND JUnit), installing either if necessary, and sets the CLASSPATH variable prior to running LogMapTest
 # How to Run
-* clone the repository
+* clone the repository (git clone https://github.com/jziyangli/quantcast_task.git)
 * cd to repository (cd quantcast_task)
 * make sure java and javac are installed (which java, which javac)
 * add executable permissions to most_active_cookie (chmod +x most_active_cookie)
