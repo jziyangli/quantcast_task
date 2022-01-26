@@ -1,3 +1,10 @@
 #!/bin/bash
-javac -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: most_active_cookie.java
-exec java -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: most_active_cookie "$@"
+#if [ ! -d "commons-cli-1\.[3-5]\.\d" ]
+if [ ! -d "commons-cli-1.5.0" ]
+then
+    wget https://commons.apache.org/cli/download_cli.cgi
+    tar -xvf commons-cli-1.*
+fi
+
+#javac -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: MostActiveCookie.java
+exec java -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: MostActiveCookie "$@"
