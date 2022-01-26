@@ -7,4 +7,9 @@ then
 fi
 
 #javac -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: MostActiveCookie.java
-exec java -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: MostActiveCookie "$@"
+qct_home=$(pwd)
+#export CLASSPATH=$CLASSPATH:$qct_home/commons-cli-1.5.0/commons-cli-1.5.0.jar:$qct_home/JUnit/junit4.10/junit-4.10.jar:$qct_home
+export CLASSPATH=$CLASSPATH:$qct_home/commons-cli-1.5.0/commons-cli-1.5.0.jar:$qct_home
+javac *.java
+#exec java -cp commons-cli-1.5.0/commons-cli-1.5.0.jar: MostActiveCookie "$@"
+exec java MostActiveCookie "$@"
