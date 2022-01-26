@@ -11,6 +11,7 @@ import java.time.format.*;
 public class LogMap
 {
     private final String COMMA_DELIMITER = ",";
+    private final String PARSE_ERROR = " could not be parsed. Use format \'yyyy-mm-dd\'";
     private HashMap<String, Integer> logMap;
     private String fileName;
     private String searchDate;
@@ -29,6 +30,17 @@ public class LogMap
         fileName = _fileName;
         searchDate = _searchDate;
 
+
+        DateTimeFormatter test = DateTimeFormatter.ISO_LOCAL_DATE;
+        Date testDate;
+        try
+        {
+            test.parse(searchDate);
+        }
+        catch (DateTimeParseException ex)
+        {
+            System.out.println("\'" + searchDate + "\'" + PARSE_ERROR);
+        }
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName)))
         {
             String entry;
