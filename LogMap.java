@@ -12,6 +12,7 @@ public class LogMap
 {
     private final String COMMA_DELIMITER = ",";
     private final String PARSE_ERROR = " could not be parsed. Use format \'yyyy-mm-dd\'";
+    private final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
     private HashMap<String, Integer> logMap;
     private String fileName;
     private String searchDate;
@@ -30,24 +31,23 @@ public class LogMap
         fileName = _fileName;
         searchDate = _searchDate;
 
-
-        DateTimeFormatter test = DateTimeFormatter.ISO_LOCAL_DATE;
-        Date testDate;
+        //validate the input date format
         try
         {
-            test.parse(searchDate);
+            ISO_LOCAL_DATE.parse(searchDate);
         }
         catch (DateTimeParseException ex)
         {
             System.out.println("\'" + searchDate + "\'" + PARSE_ERROR);
+            System.exit(1);
         }
+
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName)))
         {
             String entry;
             //Date format to read
             DateTimeFormatter entryDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
             //Date format to convert to
-            DateTimeFormatter dateOnlyFormat = DateTimeFormatter.ISO_LOCAL_DATE;
             logMap = new HashMap<>();
             boolean seenDate = false;
             while((entry = reader.readLine()) != null)
@@ -55,7 +55,7 @@ public class LogMap
                 String[] entrySplit = entry.split(COMMA_DELIMITER);
                 //Parse the date string, convert to UTC time, then format to contain only date
                 if(entrySplit.length != 2) continue;
-                String entryDate = dateOnlyFormat
+                String entryDate = ISO_LOCAL_DATE
                     .format(ZonedDateTime
                             .parse(entrySplit[1], entryDateFormat)
                             .withZoneSameInstant(ZoneOffset.UTC));
