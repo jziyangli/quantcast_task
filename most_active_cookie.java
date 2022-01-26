@@ -1,111 +1,62 @@
-import org.apache.commons.cli.*;
-import java.time.format.DateTimeFormatter;
-import java.time.*;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.Map.*;
 import java.io.*;
+import java.time.*;
+import java.time.format.*;
 
-class most_active_cookie
+/**
+ *  This class contains the most_active_cookie class which implements the logic
+ *  behind the MostActiveCookie class.
+ */
+public class most_active_cookie
 {
-    final static String COMMA_DELIMITER = ",";
-    public static void main(final String[] args) throws Exception 
+    private final String COMMA_DELIMITER = ",";
+    private HashMap<String, Integer> logMap;
+    private String fileName;
+    private String searchDate;
+
+    /**
+     *  Constructor:
+     *  Given the log file and specified date, finds the max occurance count and returns
+     *  a list of all cookies with the sasme occurance count
+     *
+     *  @param  _fileName    Name of .csv file to read.
+     *  @param  _inputDate   The specified date to search within
+     *  @return List of the cookies that occur the most within specified inputDate
+     */
+    most_active_cookie(String _fileName, String _searchDate)
     {
-        final Options options = new Options();
+        fileName = _fileName;
+        searchDate = _searchDate;
 
-        //Create required option "-d" for date in UTC time
-        Option dateOption = Option.builder("d")
-            .argName("date")
-            .hasArg()
-            .required(true)
-            .desc("Date in UTC time zone").build();
-        options.addOption(dateOption);
-
-        Option filePath = Option.builder("")
-            .argName("filePath")
-            .hasArg()
-            .required(true)
-            .desc("Path to cookie log file").build();
-
-        final CommandLineParser parser = new DefaultParser();
-        final HelpFormatter helper = new HelpFormatter();
-
-        Date testDate;
-
-        try 
-        {
-            final CommandLine cmd = parser.parse(options, args);
-            final String fileName;
-            if(cmd.getArgList().size() < 1) throw new FileNameException();
-            else fileName = cmd.getArgList().get(0); 
-            if(cmd.hasOption("d"))
-            {
-                //SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-mm-dd");
-                //inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                //Date inputDate = inputFormat.parse(cmd.getOptionValue("d"));
-                final String inputDate = cmd.getOptionValue("d");
-                for(String cookie : mostActive(fileName, inputDate))
-                {
-                    System.out.println(cookie);
-                }
-                //System.out.println(inputDate);
-            }
-        }
-        catch(ParseException ex)
-        {
-            System.out.println(ex.getMessage());
-            helper.printHelp("most_active_cookie <FILE> [OPTIONS]", options);
-            System.exit(0);
-        }
-        catch(FileNameException ex)
-        {
-            System.out.println(ex.getMessage());
-            helper.printHelp("most_active_cookie <FILE> [OPTIONS]", options);
-            System.exit(0);
-        }
-    }
-
-    public static List<String> mostActive(String fileName, String inputDate)
-    {
-        //DateTimeFormatter inputFormat = DateTimeFormatter.ISO_LOCAL_DATE;
-        //LocalDate searchDate = LocalDate.parse(inputDate, inputFormat);
-
-        HashMap<String, Integer> logMap = logToMap(fileName, inputDate);
-
-        if(logMap.size() == 0) return new ArrayList<String>();
-        int maxCount=(Collections.max(logMap.values()));
-        List<String> activeCookies = new ArrayList<>();
-        for(Entry<String, Integer> entry : logMap.entrySet())
-        {
-            if(entry.getValue() == maxCount) activeCookies.add(entry.getKey());
-        }
-        return activeCookies;
-    }
-
-    public static HashMap<String, Integer> logToMap(String fileName, String searchDate)
-    {
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName)))
         {
             String entry;
+            //Date format to read
             DateTimeFormatter entryDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            //Date format to convert to
             DateTimeFormatter dateOnlyFormat = DateTimeFormatter.ISO_LOCAL_DATE;
-            HashMap<String, Integer> logMap = new HashMap<>();
+            logMap = new HashMap<>();
+            boolean seenDate = false;
             while((entry = reader.readLine()) != null)
             {
                 String[] entrySplit = entry.split(COMMA_DELIMITER);
+                //Parse the date string, convert to UTC time, then format to contain only date
+                if(entrySplit.length != 2) continue;
                 String entryDate = dateOnlyFormat
                     .format(ZonedDateTime
-                        .parse(entrySplit[1], entryDateFormat)
-                        .withZoneSameInstant(ZoneOffset.UTC));
-                //String entryDate = dateOnlyFormat.format(LocalDate.parse(entrySplit[1], entryDateFormat)
-                //        .atStartOfDay(ZoneId.of("UTC-12")));
-                //System.out.println(entryDate + " " + searchDate);
+                            .parse(entrySplit[1], entryDateFormat)
+                            .withZoneSameInstant(ZoneOffset.UTC));
                 if(entryDate.equals(searchDate))
                 {
-                    //System.out.println("adding to map");
+                    //increment the cookie's count in hashmap if it already exists, otherwise set to 1
                     logMap.put(entrySplit[0], logMap.containsKey(entrySplit[0]) ? logMap.get(entrySplit[0]) + 1 : 1);
                 }
+                else if(seenDate)
+                {
+                    break;
+                }
             }
-            return logMap;
         }
         catch (FileNotFoundException ex)
         {
@@ -115,20 +66,34 @@ class most_active_cookie
         {
             System.exit(0);
         }
-        return new HashMap<String, Integer>();
+    }
+    /**
+     *  Given the log file and specified date, finds the max occurance count and returns
+     *  a list of all cookies with the sasme occurance count
+     *
+     *  @param  fileName    Name of .csv file to read.
+     *  @param  inputDate   The specified date to search within
+     *  @return List of the cookies that occur the most within specified inputDate
+     */
+    public List<String> mostActive()
+    {
+        if(logMap.size() == 0) return new ArrayList<String>();
+
+        //get the max count from the map
+        int maxCount=(Collections.max(logMap.values()));
+        List<String> activeCookies = new ArrayList<>();
+
+        //iterate through the map to find all keys where the value == max
+        for(Entry<String, Integer> entry : logMap.entrySet())
+        {
+            if(entry.getValue() == maxCount) activeCookies.add(entry.getKey());
+        }
+
+        return activeCookies;
     }
 
-    public static class FileNameException extends Exception
+    public HashMap<String, Integer> getMap()
     {
-        public final static String NO_FILE = "No file specified";
-        public FileNameException()
-        {
-            super(NO_FILE);
-        }
-        public FileNameException(String errorMessage)
-        {
-            super(errorMessage);
-        }
+        return logMap;
     }
 }
-
