@@ -1,6 +1,6 @@
 /**
  *  This file contains the main wrapper for the Quantcast coding task. 
- *  It contains the class most_active_cookie and a subclass FileNameException
+ *  It contains the class MostActiveCookie and a subclass FileNameException
  *  @author John Li jziyangli@yahoo.com
  */
 
@@ -67,13 +67,13 @@ class MostActiveCookie
         {
             System.out.println(ex.getMessage());
             helper.printHelp("most_active_cookie <FILE> [OPTIONS]", options);
-            System.exit(0);
+            System.exit(1);
         }
         catch(FileNameException ex)
         {
             System.out.println(ex.getMessage());
             helper.printHelp("most_active_cookie <FILE> [OPTIONS]", options);
-            System.exit(0);
+            System.exit(1);
         }
     }
 

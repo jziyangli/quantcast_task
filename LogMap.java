@@ -61,12 +61,12 @@ public class LogMap
         catch (FileNotFoundException ex)
         {
             System.out.println(ex.getMessage());
-            System.exit(0);
+            System.exit(1);
         }
         catch(IOException ex)
         {
             System.out.println(ex.getMessage());
-            System.exit(0);
+            System.exit(1);
         }
     }
     /**
