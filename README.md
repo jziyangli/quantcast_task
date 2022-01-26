@@ -24,6 +24,8 @@ This application has 5 main files:
 * clone the repository (git clone https://github.com/jziyangli/quantcast_task.git)
 * cd to repository (cd quantcast_task)
 * make sure java and javac are installed (which java, which javac)
+* If all dependencies are already installed correctly, you can run: java MostActiveCookie test/utc.csv -d 2018-12-09
+* However using the provided script is recommended:
 * add executable permissions to most_active_cookie (chmod +x most_active_cookie)
 * run most_active_cookie as specified in the instructions (./most_active_cookie tests/utc.csv -d 2018-12-09)
 * * log files are located in the tests/ directory. I have provided 2 log files: utc.csv and offset.csv
