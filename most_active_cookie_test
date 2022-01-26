@@ -10,8 +10,8 @@ then
 fi
 if [ ! -d "JUnit/junit4.10" ]
 then
-    wget https://sourceforge.net/projects/junit/files/junit/4.10/junit4.10.zip
-    unzip junit4.10.zip
+    wget https://sourceforge.net/projects/junit/files/junit/4.10/junit4.10.zip -P JUnit
+    unzip JUnit/junit4.10.zip
 fi
 
 qct_home=$(pwd)
