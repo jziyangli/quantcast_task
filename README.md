@@ -16,9 +16,13 @@ This application has 5 main files:
 * * This is a bash script which first checks for dependencies (apache commons cli AND JUnit), installing either if necessary, and sets the CLASSPATH variable prior to running LogMapTest
 # How to Run
 * clone the repository
+* cd to repository (cd quantcast_task)
 * make sure java and javac are installed (which java, which javac)
 * add executable permissions to most_active_cookie (chmod +x most_active_cookie)
-* run most_active_cookie as specified in the instructions (./most_active_cookie cookie_log.csv -d 2018-12-09)
+* run most_active_cookie as specified in the instructions (./most_active_cookie tests/utc.csv -d 2018-12-09)
+* * log files are located in the tests/ directory. I have provided 2 log files: utc.csv and offset.csv
+* * utc.csv contains all dates/times in UTC time
+* * offset.csv contains the same dates/times as utc.csv, but some are in different time zones, thus potentially changing the UTC date
 # How to Test
 * clone the repository
 * make sure that java and javac are installed
