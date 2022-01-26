@@ -2,6 +2,12 @@
 I chose to use java.time. I believe without this, it would be extremely difficult to implement the intended functionality within the given time constraints. This is due to the complexity of comparing dates and times, especially across different time zones, considering edge cases such as months having 28,30 or 31 days, leap years, and so on and so forth. 
 I used apache commons cli for parsing the command line arguments and java.io for reading the log file.
 Java.util contains basic data structures such as HashMaps and Lists which are necessary to store frequency of cookie occurances, cookie names, etc.
+
+# Algorithm
+I had initially intended to to a binary search to find the specified date in the file (given that the file is sorted). However, performing a binary search would require first reading all of the lines into some data structure. Because of this, I decided on comparing the dates as I read the lines.
+For each line, the entry is split into cookie name and date/time. The time is converted to UTC date, and compared to the specified date, if they are the same, I increment the count for that cookie in a hashmap (inserting it with value 1 if the key doesn't already exist)
+Then find the max value/count in the hashmap and find all keys(cookies) with matching value.
+The list of these keys is then printed.
 # Format
 This application has 5 main files:
 * MostActiveCookie.java
