@@ -63,7 +63,9 @@ public class LogMap
                 {
                     //increment the cookie's count in hashmap if it already exists, otherwise set to 1
                     logMap.put(entrySplit[0], logMap.containsKey(entrySplit[0]) ? logMap.get(entrySplit[0]) + 1 : 1);
+                    seenDate = true;
                 }
+                //break early if we have passed the specified date
                 else if(seenDate)
                 {
                     break;
